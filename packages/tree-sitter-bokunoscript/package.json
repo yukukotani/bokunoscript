@@ -1,0 +1,29 @@
+{
+  "name": "tree-sitter-bokunoscript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bindings/node",
+  "scripts": {
+    "build": "tree-sitter generate && node-gyp build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nan": "^2.18.0"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.20.8"
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.bs",
+      "file-types": [
+        "bs"
+      ],
+      "highlights": [],
+      "injection-regex": "^(bs|bokunoscript)$"
+    }
+  ]
+}
