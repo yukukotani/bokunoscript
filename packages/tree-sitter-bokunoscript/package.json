@@ -22,7 +22,9 @@
       "file-types": [
         "bs"
       ],
-      "highlights": [],
+      "highlights": [
+        "queries/highlights.scm"
+      ],
       "injection-regex": "^(bs|bokunoscript)$"
     }
   ]

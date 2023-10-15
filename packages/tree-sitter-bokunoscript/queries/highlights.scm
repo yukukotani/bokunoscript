@@ -1,0 +1,8 @@
+(number) @number
+
+[
+  "+"
+  "-"
+  "*"
+  "/"
+] @operator
