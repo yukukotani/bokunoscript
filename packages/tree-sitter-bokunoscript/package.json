@@ -5,13 +5,15 @@
   "main": "bindings/node",
   "scripts": {
     "build": "tree-sitter generate && node-gyp build",
+    "highlight": "tree-sitter highlight",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "nan": "^2.18.0"
+    "nan": "^2.18.0",
+    "node-gyp": "^9.4.0"
   },
   "devDependencies": {
     "tree-sitter-cli": "^0.20.8"
