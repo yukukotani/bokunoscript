@@ -3,6 +3,7 @@ import type {
   Expression,
   File,
   NumberLiteral,
+  ObjectExpression,
   Statement,
   UnaryExpression,
 } from "@bokunoscript/parser";
@@ -36,6 +37,9 @@ function transpileExpression(node: Expression): swc.Expression {
     case "BinaryExpression": {
       return transpileBinaryExpression(node);
     }
+    case "ObjectExpression": {
+      return transpileObjectExpression(node);
+    }
     case "NumberLiteral": {
       return transpileNumberLiteral(node);
     }
@@ -58,6 +62,26 @@ function transpileBinaryExpression(
     operator: node.operator,
     left: transpileExpression(node.left),
     right: transpileExpression(node.right),
+  };
+}
+function transpileObjectExpression(
+  node: ObjectExpression
+): swc.ParenthesisExpression {
+  const expr: swc.ObjectExpression = {
+    type: "ObjectExpression",
+    span: span(),
+    properties: node.properties.map((prop) => ({
+      type: "KeyValueProperty",
+      key: transpileNumberLiteral(prop.key),
+      value: transpileExpression(prop.value),
+    })),
+  };
+
+  // wrap by parens
+  return {
+    type: "ParenthesisExpression",
+    span: span(),
+    expression: expr,
   };
 }
 function transpileNumberLiteral(node: NumberLiteral): swc.NumericLiteral {

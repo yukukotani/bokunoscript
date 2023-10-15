@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tree-sitter generate && node-gyp build",
     "highlight": "tree-sitter highlight",
+    "parse": "tree-sitter parse",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

@@ -5,6 +5,8 @@ import {
   Expression,
   File,
   NumberLiteral,
+  ObjectExpression,
+  ObjectProperty,
   Statement,
   UnaryExpression,
 } from "./ast";
@@ -35,8 +37,11 @@ function parseExpression(node: SyntaxNode): Expression {
     case "binary_expression": {
       return parseBinaryExpression(node);
     }
+    case "object_expression": {
+      return parseObjectExpression(node);
+    }
     case "number": {
-      return praseNumberLiteral(node);
+      return parseNumberLiteral(node);
     }
   }
 
@@ -87,12 +92,46 @@ function parseBinaryExpression(node: SyntaxNode): BinaryExpression {
     right: parseExpression(rightNode),
   };
 }
+function parseObjectExpression(node: SyntaxNode): ObjectExpression {
+  const properties: ObjectProperty[] =
+    node.namedChildren.map(parseObjectProperty);
+  return {
+    type: "ObjectExpression",
+    properties,
+  };
+}
+function parseObjectProperty(node: SyntaxNode): ObjectProperty {
+  const keyNode = getNamedChild(node, 0);
+  const valueNode = getNamedChild(node, 1);
+  return {
+    type: "ObjectProperty",
+    key: parseNumberLiteral(keyNode),
+    value: parseExpression(valueNode),
+  };
+}
 
-function praseNumberLiteral(node: SyntaxNode): NumberLiteral {
+function parseNumberLiteral(node: SyntaxNode): NumberLiteral {
   return {
     type: "NumberLiteral",
     value: Number(node.text),
   };
+}
+
+function getChild(node: SyntaxNode, index: number) {
+  const child = node.child(index);
+  if (!child) {
+    throw new Error("Child node not found");
+  }
+
+  return child;
+}
+function getNamedChild(node: SyntaxNode, index: number) {
+  const child = node.namedChild(index);
+  if (!child) {
+    throw new Error("Child node not found");
+  }
+
+  return child;
 }
 
 function generateCST(sourceCode: string) {

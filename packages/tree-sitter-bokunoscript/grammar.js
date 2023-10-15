@@ -10,6 +10,7 @@ module.exports = grammar({
     _expression: ($) =>
       choice(
         $.number,
+        $.object_expression,
         $.unary_expression,
         $.binary_expression,
         $.parenthesized_expression
@@ -69,5 +70,18 @@ module.exports = grammar({
       ),
 
     number: ($) => /\d+/,
+    object_expression: ($) =>
+      seq("{", commaSep(optional($.object_property)), "}"),
+    object_property: ($) =>
+      seq(field("key", $._property_name), ":", field("value", $._expression)),
+    _property_name: ($) => choice($.number),
   },
 });
+
+function commaSep1(rule) {
+  return seq(rule, repeat(seq(",", rule)));
+}
+
+function commaSep(rule) {
+  return optional(commaSep1(rule));
+}

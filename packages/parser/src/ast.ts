@@ -5,7 +5,11 @@ export type File = {
 
 export type Statement = Expression;
 
-export type Expression = UnaryExpression | BinaryExpression | Literal;
+export type Expression =
+  | UnaryExpression
+  | BinaryExpression
+  | ObjectExpression
+  | Literal;
 export type UnaryExpression = {
   type: "UnaryExpression";
   operator: "+" | "-";
@@ -19,6 +23,15 @@ export type BinaryExpression = {
 };
 export type ParenthesizedExpression = {
   type: "ParenthesizedExpression";
+};
+export type ObjectExpression = {
+  type: "ObjectExpression";
+  properties: readonly ObjectProperty[];
+};
+export type ObjectProperty = {
+  type: "ObjectProperty";
+  key: Literal;
+  value: Expression;
 };
 
 export type Literal = NumberLiteral;
