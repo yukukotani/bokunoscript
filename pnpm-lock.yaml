@@ -23,9 +23,9 @@ importers:
       '@bokunoscript/parser':
         specifier: workspace:*
         version: link:../parser
-      '@bokunoscript/transpiler':
+      '@bokunoscript/transformer':
         specifier: workspace:*
-        version: link:../transpiler
+        version: link:../transformer
 
   packages/parser:
     dependencies:
@@ -36,7 +36,7 @@ importers:
         specifier: workspace:*
         version: link:../tree-sitter-bokunoscript
 
-  packages/transpiler:
+  packages/transformer:
     dependencies:
       '@swc/core':
         specifier: ^1.3.93

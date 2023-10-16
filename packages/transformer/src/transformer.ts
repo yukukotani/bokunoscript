@@ -11,65 +11,65 @@ import type {
 } from "@bokunoscript/parser";
 import * as swc from "@swc/core";
 
-export function transpile(node: File): string {
-  const program = transpileFile(node);
+export function transform(node: File): string {
+  const program = transformFile(node);
   return swc.printSync(program).code;
 }
 
-function transpileFile(node: File): swc.Program {
+function transformFile(node: File): swc.Program {
   return {
     type: "Module",
     interpreter: "",
     span: span(),
-    body: node.statements.map(transpileStatement),
+    body: node.statements.map(transformStatement),
   };
 }
-function transpileStatement(node: Statement): swc.Statement {
+function transformStatement(node: Statement): swc.Statement {
   return {
     type: "ExpressionStatement",
     span: span(),
-    expression: transpileExpression(node),
+    expression: transformExpression(node),
   };
 }
-function transpileExpression(node: Expression): swc.Expression {
+function transformExpression(node: Expression): swc.Expression {
   switch (node.type) {
     case "UnaryExpression": {
-      return transpileUnaryExpression(node);
+      return transformUnaryExpression(node);
     }
     case "BinaryExpression": {
-      return transpileBinaryExpression(node);
+      return transformBinaryExpression(node);
     }
     case "ObjectExpression": {
-      return transpileObjectExpression(node);
+      return transformObjectExpression(node);
     }
     case "NumberLiteral": {
-      return transpileNumberLiteral(node);
+      return transformNumberLiteral(node);
     }
     case "StringLiteral": {
-      return transpileStringLiteral(node);
+      return transformStringLiteral(node);
     }
   }
 }
-function transpileUnaryExpression(node: UnaryExpression): swc.UnaryExpression {
+function transformUnaryExpression(node: UnaryExpression): swc.UnaryExpression {
   return {
     type: "UnaryExpression",
     span: span(),
     operator: node.operator,
-    argument: transpileExpression(node.expression),
+    argument: transformExpression(node.expression),
   };
 }
-function transpileBinaryExpression(
+function transformBinaryExpression(
   node: BinaryExpression
 ): swc.BinaryExpression {
   return {
     type: "BinaryExpression",
     span: span(),
     operator: node.operator,
-    left: transpileExpression(node.left),
-    right: transpileExpression(node.right),
+    left: transformExpression(node.left),
+    right: transformExpression(node.right),
   };
 }
-function transpileObjectExpression(
+function transformObjectExpression(
   node: ObjectExpression
 ): swc.ParenthesisExpression {
   const expr: swc.ObjectExpression = {
@@ -77,8 +77,8 @@ function transpileObjectExpression(
     span: span(),
     properties: node.properties.map((prop) => ({
       type: "KeyValueProperty",
-      key: transpilePropertyKey(prop.key),
-      value: transpileExpression(prop.value),
+      key: transformPropertyKey(prop.key),
+      value: transformExpression(prop.value),
     })),
   };
 
@@ -89,24 +89,24 @@ function transpileObjectExpression(
     expression: expr,
   };
 }
-function transpilePropertyKey(node: Literal): swc.PropertyName {
+function transformPropertyKey(node: Literal): swc.PropertyName {
   switch (node.type) {
     case "NumberLiteral": {
-      return transpileNumberLiteral(node);
+      return transformNumberLiteral(node);
     }
     case "StringLiteral": {
-      return transpileStringLiteral(node);
+      return transformStringLiteral(node);
     }
   }
 }
-function transpileNumberLiteral(node: NumberLiteral): swc.NumericLiteral {
+function transformNumberLiteral(node: NumberLiteral): swc.NumericLiteral {
   return {
     type: "NumericLiteral",
     span: span(),
     value: node.value,
   };
 }
-function transpileStringLiteral(node: StringLiteral): swc.StringLiteral {
+function transformStringLiteral(node: StringLiteral): swc.StringLiteral {
   return {
     type: "StringLiteral",
     span: span(),

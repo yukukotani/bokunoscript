@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@bokunoscript/parser": "workspace:*",
-    "@bokunoscript/transpiler": "workspace:*"
+    "@bokunoscript/transformer": "workspace:*"
   },
   "keywords": [],
   "author": "",
