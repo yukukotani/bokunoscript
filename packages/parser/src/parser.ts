@@ -4,6 +4,8 @@ import {
   BinaryExpression,
   Expression,
   File,
+  FunctionDeclaration,
+  Identifier,
   NumberLiteral,
   ObjectExpression,
   ObjectProperty,
@@ -27,7 +29,11 @@ function parseFile(node: SyntaxNode): File {
 }
 
 function parseStatement(node: SyntaxNode): Statement {
-  return parseExpression(node);
+  if (node.type === "function_declaration") {
+    return parseFunctionDeclaration(node);
+  } else {
+    return parseExpression(node);
+  }
 }
 
 function parseExpression(node: SyntaxNode): Expression {
@@ -126,6 +132,25 @@ function parseStringLiteral(node: SyntaxNode): StringLiteral {
     type: "StringLiteral",
     value: node.firstNamedChild!.text,
   };
+}
+
+function parseFunctionDeclaration(node: SyntaxNode): FunctionDeclaration {
+  return {
+    type: "FunctionDeclaration",
+    name: parseIdentifier(getNamedChild(node, 0)),
+    statements: parseBlock(getNamedChild(node, 1)),
+  };
+}
+
+function parseIdentifier(node: SyntaxNode): Identifier {
+  return {
+    type: "Identifier",
+    name: node.text,
+  };
+}
+
+function parseBlock(node: SyntaxNode): Statement[] {
+  return node.namedChildren.map(parseStatement);
 }
 
 function getChild(node: SyntaxNode, index: number) {

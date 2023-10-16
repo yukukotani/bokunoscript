@@ -3,9 +3,9 @@ module.exports = grammar({
 
   rules: {
     // TODO: add the actual grammar rules
-    source_file: ($) => $._statement,
+    source_file: ($) => repeat($._statement),
 
-    _statement: ($) => choice($._expression),
+    _statement: ($) => choice($._expression, $.function_declaration),
 
     _expression: ($) =>
       choice(
@@ -79,6 +79,20 @@ module.exports = grammar({
     object_property: ($) =>
       seq(field("key", $._property_name), ":", field("value", $._expression)),
     _property_name: ($) => choice($.number),
+
+    function_declaration: ($) => seq("fun", $.identifier, $.block),
+
+    // from tree-sitter-javascript
+    identifier: (_) => {
+      // eslint-disable-next-line max-len
+      const alpha =
+        /[^\x00-\x1F\s\p{Zs}0-9:;`"'@#.,|^&<=>+\-*/\\%?!~()\[\]{}\uFEFF\u2060\u200B]|\\u[0-9a-fA-F]{4}|\\u\{[0-9a-fA-F]+\}/;
+      // eslint-disable-next-line max-len
+      const alphanumeric =
+        /[^\x00-\x1F\s\p{Zs}:;`"'@#.,|^&<=>+\-*/\\%?!~()\[\]{}\uFEFF\u2060\u200B]|\\u[0-9a-fA-F]{4}|\\u\{[0-9a-fA-F]+\}/;
+      return token(seq(alpha, repeat(alphanumeric)));
+    },
+    block: ($) => seq("{", repeat($._statement), "}"),
   },
 });
 

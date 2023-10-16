@@ -3,7 +3,7 @@ export type File = {
   statements: readonly Statement[];
 };
 
-export type Statement = Expression;
+export type Statement = Expression | FunctionDeclaration;
 
 export type Expression =
   | UnaryExpression
@@ -42,4 +42,15 @@ export type NumberLiteral = {
 export type StringLiteral = {
   type: "StringLiteral";
   value: string;
+};
+
+export type FunctionDeclaration = {
+  type: "FunctionDeclaration";
+  name: Identifier;
+  statements: readonly Statement[];
+};
+
+export type Identifier = {
+  type: "Identifier";
+  name: string;
 };

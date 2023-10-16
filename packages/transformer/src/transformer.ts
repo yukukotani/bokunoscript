@@ -2,6 +2,8 @@ import type {
   BinaryExpression,
   Expression,
   File,
+  FunctionDeclaration,
+  Identifier,
   Literal,
   NumberLiteral,
   ObjectExpression,
@@ -25,11 +27,18 @@ function transformFile(node: File): swc.Program {
   };
 }
 function transformStatement(node: Statement): swc.Statement {
-  return {
-    type: "ExpressionStatement",
-    span: span(),
-    expression: transformExpression(node),
-  };
+  switch (node.type) {
+    case "FunctionDeclaration": {
+      return transformFunctionDeclaration(node);
+    }
+    default: {
+      return {
+        type: "ExpressionStatement",
+        span: span(),
+        expression: transformExpression(node),
+      };
+    }
+  }
 }
 function transformExpression(node: Expression): swc.Expression {
   switch (node.type) {
@@ -111,6 +120,34 @@ function transformStringLiteral(node: StringLiteral): swc.StringLiteral {
     type: "StringLiteral",
     span: span(),
     value: node.value,
+  };
+}
+
+function transformFunctionDeclaration(
+  node: FunctionDeclaration
+): swc.FunctionDeclaration {
+  return {
+    type: "FunctionDeclaration",
+    span: span(),
+    async: false,
+    declare: false,
+    generator: false,
+    body: {
+      type: "BlockStatement",
+      span: span(),
+      stmts: node.statements.map(transformStatement),
+    },
+    identifier: transformIdentifier(node.name),
+    params: [], // TODO
+  };
+}
+
+function transformIdentifier(node: Identifier): swc.Identifier {
+  return {
+    type: "Identifier",
+    span: span(),
+    optional: false,
+    value: node.name,
   };
 }
 
