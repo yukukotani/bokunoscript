@@ -8,6 +8,7 @@ import {
   ObjectExpression,
   ObjectProperty,
   Statement,
+  StringLiteral,
   UnaryExpression,
 } from "./ast";
 
@@ -42,6 +43,9 @@ function parseExpression(node: SyntaxNode): Expression {
     }
     case "number": {
       return parseNumberLiteral(node);
+    }
+    case "string": {
+      return parseStringLiteral(node);
     }
   }
 
@@ -114,6 +118,13 @@ function parseNumberLiteral(node: SyntaxNode): NumberLiteral {
   return {
     type: "NumberLiteral",
     value: Number(node.text),
+  };
+}
+
+function parseStringLiteral(node: SyntaxNode): StringLiteral {
+  return {
+    type: "StringLiteral",
+    value: node.firstNamedChild!.text,
   };
 }
 

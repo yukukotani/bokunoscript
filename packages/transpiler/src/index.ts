@@ -2,9 +2,11 @@ import type {
   BinaryExpression,
   Expression,
   File,
+  Literal,
   NumberLiteral,
   ObjectExpression,
   Statement,
+  StringLiteral,
   UnaryExpression,
 } from "@bokunoscript/parser";
 import * as swc from "@swc/core";
@@ -43,6 +45,9 @@ function transpileExpression(node: Expression): swc.Expression {
     case "NumberLiteral": {
       return transpileNumberLiteral(node);
     }
+    case "StringLiteral": {
+      return transpileStringLiteral(node);
+    }
   }
 }
 function transpileUnaryExpression(node: UnaryExpression): swc.UnaryExpression {
@@ -72,7 +77,7 @@ function transpileObjectExpression(
     span: span(),
     properties: node.properties.map((prop) => ({
       type: "KeyValueProperty",
-      key: transpileNumberLiteral(prop.key),
+      key: transpilePropertyKey(prop.key),
       value: transpileExpression(prop.value),
     })),
   };
@@ -84,9 +89,26 @@ function transpileObjectExpression(
     expression: expr,
   };
 }
+function transpilePropertyKey(node: Literal): swc.PropertyName {
+  switch (node.type) {
+    case "NumberLiteral": {
+      return transpileNumberLiteral(node);
+    }
+    case "StringLiteral": {
+      return transpileStringLiteral(node);
+    }
+  }
+}
 function transpileNumberLiteral(node: NumberLiteral): swc.NumericLiteral {
   return {
     type: "NumericLiteral",
+    span: span(),
+    value: node.value,
+  };
+}
+function transpileStringLiteral(node: StringLiteral): swc.StringLiteral {
+  return {
+    type: "StringLiteral",
     span: span(),
     value: node.value,
   };

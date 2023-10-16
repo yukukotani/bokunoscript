@@ -34,8 +34,12 @@ export type ObjectProperty = {
   value: Expression;
 };
 
-export type Literal = NumberLiteral;
+export type Literal = NumberLiteral | StringLiteral;
 export type NumberLiteral = {
   type: "NumberLiteral";
   value: number;
+};
+export type StringLiteral = {
+  type: "StringLiteral";
+  value: string;
 };

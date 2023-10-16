@@ -10,6 +10,7 @@ module.exports = grammar({
     _expression: ($) =>
       choice(
         $.number,
+        $.string,
         $.object_expression,
         $.unary_expression,
         $.binary_expression,
@@ -70,6 +71,9 @@ module.exports = grammar({
       ),
 
     number: ($) => /\d+/,
+    string: ($) => seq('"', repeat($.unescaped_string_fragment), '"'),
+    unescaped_string_fragment: (_) => token.immediate(prec(1, /[^"\\]+/)),
+
     object_expression: ($) =>
       seq("{", commaSep(optional($.object_property)), "}"),
     object_property: ($) =>
