@@ -73,6 +73,9 @@ function parseExpression(node: SyntaxNode): Expression {
     case "call_expression": {
       return parseCallExpression(node);
     }
+    case "identifier": {
+      return parseIdentifier(node);
+    }
     case "number": {
       return parseNumberLiteral(node);
     }

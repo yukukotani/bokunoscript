@@ -18,6 +18,7 @@ export type Expression =
   | ObjectExpression
   | MemberExpression
   | CallExpression
+  | Identifier
   | Literal;
 export type UnaryExpression = {
   type: "UnaryExpression";

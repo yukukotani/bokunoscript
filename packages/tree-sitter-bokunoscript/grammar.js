@@ -31,6 +31,7 @@ module.exports = grammar({
       choice(
         $.number,
         $.string,
+        $.identifier,
         $.object_expression,
         $.unary_expression,
         $.binary_expression,

@@ -63,6 +63,9 @@ function transformExpression(node: Expression): swc.Expression {
     case "CallExpression": {
       return transformCallExpression(node);
     }
+    case "Identifier": {
+      return transformIdentifier(node);
+    }
     case "NumberLiteral": {
       return transformNumberLiteral(node);
     }
