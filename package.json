@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepare": "pnpm --filter tree-sitter-bokunoscript build",
+    "compile": "tsx ./packages/core/src/index.ts",
+    "start": "node output.js"
   },
   "keywords": [],
   "author": "",

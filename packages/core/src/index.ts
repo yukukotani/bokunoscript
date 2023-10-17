@@ -1,9 +1,8 @@
 import { parse } from "@bokunoscript/parser";
 import { transform } from "@bokunoscript/transformer";
 import { writeFileSync, readFileSync } from "fs";
-import * as path from "path";
 
-const file = readFileSync(path.join(__dirname, "../input.bs"));
+const file = readFileSync("input.bs");
 
 compile(String(file));
 
@@ -12,7 +11,7 @@ export function compile(sourceCode: string) {
 
   const output = transform(tree);
 
-  writeFileSync(path.join(__dirname, "../dist.js"), output);
+  writeFileSync("output.js", output);
 
   console.log("Compiled!");
 }
