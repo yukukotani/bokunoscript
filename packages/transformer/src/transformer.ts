@@ -1,5 +1,6 @@
 import type {
   BinaryExpression,
+  CallExpression,
   Expression,
   File,
   FunctionDeclaration,
@@ -58,6 +59,9 @@ function transformExpression(node: Expression): swc.Expression {
     }
     case "MemberExpression": {
       return transformMemberExpression(node);
+    }
+    case "CallExpression": {
+      return transformCallExpression(node);
     }
     case "NumberLiteral": {
       return transformNumberLiteral(node);
@@ -119,15 +123,27 @@ function transformPropertyKey(node: Literal): swc.PropertyName {
 function transformMemberExpression(
   node: MemberExpression
 ): swc.MemberExpression {
-  console.log(node);
-  const a = {
+  return {
     type: "MemberExpression",
     span: span(),
     object: transformExpression(node.object),
     property: transformIdentifier(node.property),
-  } as const;
-  console.log("a", a);
-  return a;
+  };
+}
+function transformCallExpression(node: CallExpression): swc.CallExpression {
+  return {
+    type: "CallExpression",
+    span: span(),
+    callee: transformIdentifier(node.function),
+    arguments: [
+      {
+        expression: transformExpression(node.receiver),
+      },
+      ...node.arguments.map((e) => ({
+        expression: transformExpression(e),
+      })),
+    ],
+  };
 }
 function transformNumberLiteral(node: NumberLiteral): swc.NumericLiteral {
   return {

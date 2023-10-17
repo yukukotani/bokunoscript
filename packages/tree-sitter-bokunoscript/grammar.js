@@ -2,7 +2,13 @@ module.exports = grammar({
   name: "bokunoscript",
 
   precedences: ($) => [
-    [$.member_expression, $.unary_expression, "binary_times", "binary_plus"],
+    [
+      $.member_expression,
+      $.call_expression,
+      $.unary_expression,
+      "binary_times",
+      "binary_plus",
+    ],
     [$.block, $.object_expression],
   ],
 
@@ -28,8 +34,8 @@ module.exports = grammar({
         $.object_expression,
         $.unary_expression,
         $.binary_expression,
-        $.parenthesized_expression,
-        $.member_expression
+        $.member_expression,
+        $.call_expression
       ),
 
     parenthesized_expression: ($) => seq("(", $._expression, ")"),
@@ -83,6 +89,14 @@ module.exports = grammar({
 
     member_expression: ($) =>
       seq(field("object", $._expression), ".", field("property", $.identifier)),
+    call_expression: ($) =>
+      seq(
+        field("receiver", $._expression),
+        ".",
+        field("function", $.identifier),
+        $.call_arguments
+      ),
+    call_arguments: ($) => seq("(", commaSep($._expression), ")"),
 
     function_declaration: ($) => seq("fun", $.identifier, $.block),
     variable_declaration: ($) => seq("val", $.identifier, "=", $._expression),

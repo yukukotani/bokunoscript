@@ -17,6 +17,7 @@ export type Expression =
   | BinaryExpression
   | ObjectExpression
   | MemberExpression
+  | CallExpression
   | Literal;
 export type UnaryExpression = {
   type: "UnaryExpression";
@@ -47,6 +48,12 @@ export type MemberExpression = {
   type: "MemberExpression";
   object: Expression;
   property: Identifier;
+};
+export type CallExpression = {
+  type: "CallExpression";
+  receiver: Expression;
+  function: Identifier;
+  arguments: readonly Expression[];
 };
 
 export type Literal = NumberLiteral | StringLiteral;

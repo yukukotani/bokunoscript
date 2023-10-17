@@ -2,6 +2,7 @@ import language from "tree-sitter-bokunoscript";
 import TreeSitterParser, { SyntaxNode } from "tree-sitter";
 import {
   BinaryExpression,
+  CallExpression,
   Expression,
   ExpressionStatement,
   File,
@@ -68,6 +69,9 @@ function parseExpression(node: SyntaxNode): Expression {
     }
     case "member_expression": {
       return parseMemberExpression(node);
+    }
+    case "call_expression": {
+      return parseCallExpression(node);
     }
     case "number": {
       return parseNumberLiteral(node);
@@ -160,6 +164,18 @@ function parseMemberExpression(node: SyntaxNode): MemberExpression {
     object: parseExpression(getNamedChild(node, 0)),
     property: parseIdentifier(getNamedChild(node, 1)),
   };
+}
+
+function parseCallExpression(node: SyntaxNode): CallExpression {
+  return {
+    type: "CallExpression",
+    receiver: parseExpression(getNamedChild(node, 0)),
+    function: parseIdentifier(getNamedChild(node, 1)),
+    arguments: parseCallArguments(getNamedChild(node, 2)),
+  };
+}
+function parseCallArguments(node: SyntaxNode): Expression[] {
+  return node.namedChildren.map(parseExpression);
 }
 
 function parseNumberLiteral(node: SyntaxNode): NumberLiteral {
