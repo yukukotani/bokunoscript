@@ -1,4 +1,5 @@
 (number) @number
+(string) @string
 
 [
   "+"

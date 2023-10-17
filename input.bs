@@ -1,5 +1,8 @@
 fun addThenPrint(i) {
- println(this + i)
+  val result = {
+    "value": this + i
+  }
+  println(result)
 }
 
 val foo = 1
