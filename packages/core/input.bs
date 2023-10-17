@@ -1,5 +1,5 @@
 fun bar(i) {
-  this + i + 3
+ println(this + i + 3)
 }
 val foo = 1
 foo.bar(2)

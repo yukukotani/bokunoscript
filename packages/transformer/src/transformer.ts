@@ -136,18 +136,19 @@ function transformMemberExpression(
   };
 }
 function transformCallExpression(node: CallExpression): swc.CallExpression {
+  const args = node.arguments.map((e) => ({
+    expression: transformExpression(e),
+  }));
+  if (node.receiver) {
+    args.push({
+      expression: transformExpression(node.receiver),
+    });
+  }
   return {
     type: "CallExpression",
     span: span(),
     callee: transformIdentifier(node.function),
-    arguments: [
-      ...node.arguments.map((e) => ({
-        expression: transformExpression(e),
-      })),
-      {
-        expression: transformExpression(node.receiver),
-      },
-    ],
+    arguments: args,
   };
 }
 function transformNumberLiteral(node: NumberLiteral): swc.NumericLiteral {

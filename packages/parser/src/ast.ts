@@ -52,7 +52,7 @@ export type MemberExpression = {
 };
 export type CallExpression = {
   type: "CallExpression";
-  receiver: Expression;
+  receiver: Expression | null;
   function: Identifier;
   arguments: readonly Expression[];
 };

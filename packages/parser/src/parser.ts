@@ -170,11 +170,12 @@ function parseMemberExpression(node: SyntaxNode): MemberExpression {
 }
 
 function parseCallExpression(node: SyntaxNode): CallExpression {
+  const receiverNode = getFieldOrNull(node, "receiver");
   return {
     type: "CallExpression",
-    receiver: parseExpression(getNamedChild(node, 0)),
-    function: parseIdentifier(getNamedChild(node, 1)),
-    arguments: parseCallArguments(getNamedChild(node, 2)),
+    receiver: receiverNode ? parseExpression(receiverNode) : null,
+    function: parseIdentifier(getField(node, "function")),
+    arguments: parseCallArguments(getField(node, "arguments")),
   };
 }
 function parseCallArguments(node: SyntaxNode): Expression[] {
@@ -239,6 +240,19 @@ function getNamedChild(node: SyntaxNode, index: number) {
   if (!child) {
     throw new Error("Child node not found");
   }
+
+  return child;
+}
+function getField(node: SyntaxNode, fieldName: string) {
+  const child = getFieldOrNull(node, fieldName);
+  if (!child) {
+    throw new Error("Field node not found");
+  }
+
+  return child;
+}
+function getFieldOrNull(node: SyntaxNode, fieldName: string) {
+  const child: SyntaxNode | null = (node as any)[`${fieldName}Node`]; // https://github.com/tree-sitter/node-tree-sitter/issues/99#issuecomment-1040670432
 
   return child;
 }

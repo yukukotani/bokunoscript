@@ -1,5 +1,1 @@
-fun bar (p) {
-  p
-}
-
 foo.bar()

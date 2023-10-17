@@ -13,4 +13,6 @@ export function compile(sourceCode: string) {
   const output = transform(tree);
 
   writeFileSync(path.join(__dirname, "../dist.js"), output);
+
+  console.log("Compiled!");
 }

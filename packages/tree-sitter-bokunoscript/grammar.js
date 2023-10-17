@@ -92,10 +92,9 @@ module.exports = grammar({
       seq(field("object", $._expression), ".", field("property", $.identifier)),
     call_expression: ($) =>
       seq(
-        field("receiver", $._expression),
-        ".",
+        optional(seq(field("receiver", $._expression), ".")),
         field("function", $.identifier),
-        $.call_arguments
+        field("arguments", $.call_arguments)
       ),
     call_arguments: ($) => seq("(", commaSep($._expression), ")"),
 
