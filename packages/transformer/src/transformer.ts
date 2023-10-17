@@ -31,11 +31,11 @@ function transformStatement(node: Statement): swc.Statement {
     case "FunctionDeclaration": {
       return transformFunctionDeclaration(node);
     }
-    default: {
+    case "ExpressionStatement": {
       return {
         type: "ExpressionStatement",
         span: span(),
-        expression: transformExpression(node),
+        expression: transformExpression(node.expression),
       };
     }
   }

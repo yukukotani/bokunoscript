@@ -3,6 +3,7 @@ import TreeSitterParser, { SyntaxNode } from "tree-sitter";
 import {
   BinaryExpression,
   Expression,
+  ExpressionStatement,
   File,
   FunctionDeclaration,
   Identifier,
@@ -29,11 +30,23 @@ function parseFile(node: SyntaxNode): File {
 }
 
 function parseStatement(node: SyntaxNode): Statement {
-  if (node.type === "function_declaration") {
-    return parseFunctionDeclaration(node);
-  } else {
-    return parseExpression(node);
+  switch (node.type) {
+    case "function_declaration": {
+      return parseFunctionDeclaration(node);
+    }
+    case "expression_statement": {
+      return parseExpressionStatement(node);
+    }
   }
+
+  throw new Error(`Unexpected node type: ${node.type}, ${node.text}`);
+}
+
+function parseExpressionStatement(node: SyntaxNode): ExpressionStatement {
+  return {
+    type: "ExpressionStatement",
+    expression: parseExpression(getNamedChild(node, 0)),
+  };
 }
 
 function parseExpression(node: SyntaxNode): Expression {
@@ -130,7 +143,7 @@ function parseNumberLiteral(node: SyntaxNode): NumberLiteral {
 function parseStringLiteral(node: SyntaxNode): StringLiteral {
   return {
     type: "StringLiteral",
-    value: node.firstNamedChild!.text,
+    value: node.firstChild!.text,
   };
 }
 
@@ -177,5 +190,3 @@ function generateCST(sourceCode: string) {
   const tree = parser.parse(sourceCode);
   return tree;
 }
-
-parse("5 + 1");

@@ -3,7 +3,11 @@ export type File = {
   statements: readonly Statement[];
 };
 
-export type Statement = Expression | FunctionDeclaration;
+export type Statement = ExpressionStatement | FunctionDeclaration;
+export type ExpressionStatement = {
+  type: "ExpressionStatement";
+  expression: Expression;
+};
 
 export type Expression =
   | UnaryExpression
