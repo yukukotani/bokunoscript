@@ -15,16 +15,18 @@ import type {
   VariableDeclaration,
 } from "@bokunoscript/parser";
 import * as swc from "@swc/core";
+import { appendStdLib } from "./stdlib";
 
 export function transform(node: File): string {
   const program = transformFile(node);
-  return swc.printSync(program).code;
+  const code = swc.printSync(program).code;
+  return appendStdLib(code);
 }
 
 function transformFile(node: File): swc.Program {
   return {
     type: "Module",
-    interpreter: "",
+    interpreter: null!,
     span: span(),
     body: node.statements.map(transformStatement),
   };
