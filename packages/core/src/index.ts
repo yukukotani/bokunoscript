@@ -3,7 +3,7 @@ import { transform } from "@bokunoscript/transformer";
 import { writeFileSync } from "fs";
 
 compile(`fun foo {
-  {  1: 2 }
+  {  "foo": 2 }
 }
 `);
 

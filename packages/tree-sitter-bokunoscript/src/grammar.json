@@ -262,7 +262,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "_unescaped_string_fragment"
+            "name": "unescaped_string_fragment"
           }
         },
         {
@@ -271,7 +271,7 @@
         }
       ]
     },
-    "_unescaped_string_fragment": {
+    "unescaped_string_fragment": {
       "type": "IMMEDIATE_TOKEN",
       "content": {
         "type": "PATTERN",
@@ -348,7 +348,7 @@
           "name": "key",
           "content": {
             "type": "SYMBOL",
-            "name": "_property_name"
+            "name": "_property_key"
           }
         },
         {
@@ -365,7 +365,7 @@
         }
       ]
     },
-    "_property_name": {
+    "_property_key": {
       "type": "CHOICE",
       "members": [
         {

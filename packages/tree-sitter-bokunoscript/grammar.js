@@ -63,14 +63,14 @@ module.exports = grammar({
       ),
 
     number: ($) => /\d+/,
-    string: ($) => seq('"', repeat($._unescaped_string_fragment), '"'),
-    _unescaped_string_fragment: (_) => token.immediate(/[^"\\]+/),
+    string: ($) => seq('"', repeat($.unescaped_string_fragment), '"'),
+    unescaped_string_fragment: (_) => token.immediate(/[^"\\]+/),
 
     object_expression: ($) =>
       seq("{", commaSep(optional($.object_property)), "}"),
     object_property: ($) =>
-      seq(field("key", $._property_name), ":", field("value", $._expression)),
-    _property_name: ($) => choice($.number, $.string),
+      seq(field("key", $._property_key), ":", field("value", $._expression)),
+    _property_key: ($) => choice($.number, $.string),
 
     function_declaration: ($) => seq("fun", $.identifier, $.block),
 

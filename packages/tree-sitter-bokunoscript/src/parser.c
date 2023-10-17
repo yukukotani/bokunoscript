@@ -26,7 +26,7 @@ enum {
   anon_sym_SLASH = 7,
   sym_number = 8,
   anon_sym_DQUOTE = 9,
-  sym__unescaped_string_fragment = 10,
+  sym_unescaped_string_fragment = 10,
   anon_sym_LBRACE = 11,
   anon_sym_COMMA = 12,
   anon_sym_RBRACE = 13,
@@ -43,7 +43,7 @@ enum {
   sym_string = 24,
   sym_object_expression = 25,
   sym_object_property = 26,
-  sym__property_name = 27,
+  sym__property_key = 27,
   sym_function_declaration = 28,
   sym_block = 29,
   aux_sym_source_file_repeat1 = 30,
@@ -62,7 +62,7 @@ static const char * const ts_symbol_names[] = {
   [anon_sym_SLASH] = "/",
   [sym_number] = "number",
   [anon_sym_DQUOTE] = "\"",
-  [sym__unescaped_string_fragment] = "_unescaped_string_fragment",
+  [sym_unescaped_string_fragment] = "unescaped_string_fragment",
   [anon_sym_LBRACE] = "{",
   [anon_sym_COMMA] = ",",
   [anon_sym_RBRACE] = "}",
@@ -79,7 +79,7 @@ static const char * const ts_symbol_names[] = {
   [sym_string] = "string",
   [sym_object_expression] = "object_expression",
   [sym_object_property] = "object_property",
-  [sym__property_name] = "_property_name",
+  [sym__property_key] = "_property_key",
   [sym_function_declaration] = "function_declaration",
   [sym_block] = "block",
   [aux_sym_source_file_repeat1] = "source_file_repeat1",
@@ -98,7 +98,7 @@ static const TSSymbol ts_symbol_map[] = {
   [anon_sym_SLASH] = anon_sym_SLASH,
   [sym_number] = sym_number,
   [anon_sym_DQUOTE] = anon_sym_DQUOTE,
-  [sym__unescaped_string_fragment] = sym__unescaped_string_fragment,
+  [sym_unescaped_string_fragment] = sym_unescaped_string_fragment,
   [anon_sym_LBRACE] = anon_sym_LBRACE,
   [anon_sym_COMMA] = anon_sym_COMMA,
   [anon_sym_RBRACE] = anon_sym_RBRACE,
@@ -115,7 +115,7 @@ static const TSSymbol ts_symbol_map[] = {
   [sym_string] = sym_string,
   [sym_object_expression] = sym_object_expression,
   [sym_object_property] = sym_object_property,
-  [sym__property_name] = sym__property_name,
+  [sym__property_key] = sym__property_key,
   [sym_function_declaration] = sym_function_declaration,
   [sym_block] = sym_block,
   [aux_sym_source_file_repeat1] = aux_sym_source_file_repeat1,
@@ -164,8 +164,8 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .visible = true,
     .named = false,
   },
-  [sym__unescaped_string_fragment] = {
-    .visible = false,
+  [sym_unescaped_string_fragment] = {
+    .visible = true,
     .named = true,
   },
   [anon_sym_LBRACE] = {
@@ -232,7 +232,7 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .visible = true,
     .named = true,
   },
-  [sym__property_name] = {
+  [sym__property_key] = {
     .visible = false,
     .named = true,
   },
@@ -539,7 +539,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       ACCEPT_TOKEN(anon_sym_DQUOTE);
       END_STATE();
     case 23:
-      ACCEPT_TOKEN(sym__unescaped_string_fragment);
+      ACCEPT_TOKEN(sym_unescaped_string_fragment);
       if (lookahead == '\t' ||
           lookahead == '\n' ||
           lookahead == '\r' ||
@@ -549,7 +549,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
           lookahead != '\\') ADVANCE(24);
       END_STATE();
     case 24:
-      ACCEPT_TOKEN(sym__unescaped_string_fragment);
+      ACCEPT_TOKEN(sym_unescaped_string_fragment);
       if (lookahead != 0 &&
           lookahead != '"' &&
           lookahead != '\\') ADVANCE(24);
@@ -1070,7 +1070,7 @@ static const uint16_t ts_small_parse_table[] = {
       aux_sym_object_expression_repeat1,
     STATE(67), 2,
       sym_string,
-      sym__property_name,
+      sym__property_key,
   [303] = 7,
     ACTIONS(63), 1,
       anon_sym_DQUOTE,
@@ -1086,7 +1086,7 @@ static const uint16_t ts_small_parse_table[] = {
       aux_sym_object_expression_repeat1,
     STATE(67), 2,
       sym_string,
-      sym__property_name,
+      sym__property_key,
   [326] = 1,
     ACTIONS(89), 8,
       anon_sym_LPAREN,
@@ -1195,7 +1195,7 @@ static const uint16_t ts_small_parse_table[] = {
       anon_sym_RBRACE,
     STATE(67), 2,
       sym_string,
-      sym__property_name,
+      sym__property_key,
   [451] = 1,
     ACTIONS(115), 7,
       anon_sym_RPAREN,
@@ -1351,21 +1351,21 @@ static const uint16_t ts_small_parse_table[] = {
     ACTIONS(153), 1,
       anon_sym_DQUOTE,
     ACTIONS(155), 1,
-      sym__unescaped_string_fragment,
+      sym_unescaped_string_fragment,
     STATE(55), 1,
       aux_sym_string_repeat1,
   [654] = 3,
     ACTIONS(157), 1,
       anon_sym_DQUOTE,
     ACTIONS(159), 1,
-      sym__unescaped_string_fragment,
+      sym_unescaped_string_fragment,
     STATE(55), 1,
       aux_sym_string_repeat1,
   [664] = 3,
     ACTIONS(162), 1,
       anon_sym_DQUOTE,
     ACTIONS(164), 1,
-      sym__unescaped_string_fragment,
+      sym_unescaped_string_fragment,
     STATE(59), 1,
       aux_sym_string_repeat1,
   [674] = 3,
@@ -1379,12 +1379,12 @@ static const uint16_t ts_small_parse_table[] = {
     ACTIONS(168), 1,
       anon_sym_DQUOTE,
     ACTIONS(170), 1,
-      sym__unescaped_string_fragment,
+      sym_unescaped_string_fragment,
     STATE(54), 1,
       aux_sym_string_repeat1,
   [694] = 3,
     ACTIONS(155), 1,
-      sym__unescaped_string_fragment,
+      sym_unescaped_string_fragment,
     ACTIONS(172), 1,
       anon_sym_DQUOTE,
     STATE(55), 1,

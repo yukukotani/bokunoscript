@@ -10,6 +10,7 @@ import {
   NumberLiteral,
   ObjectExpression,
   ObjectProperty,
+  ObjectPropertyKey,
   Statement,
   StringLiteral,
   UnaryExpression,
@@ -39,7 +40,7 @@ function parseStatement(node: SyntaxNode): Statement {
     }
   }
 
-  throw new Error(`Unexpected node type: ${node.type}, ${node.text}`);
+  throw new Error(`Unexpected node type: ${node.type}`);
 }
 
 function parseExpressionStatement(node: SyntaxNode): ExpressionStatement {
@@ -128,9 +129,22 @@ function parseObjectProperty(node: SyntaxNode): ObjectProperty {
   const valueNode = getNamedChild(node, 1);
   return {
     type: "ObjectProperty",
-    key: parseNumberLiteral(keyNode),
+    key: parseObjectPropertyKey(keyNode),
     value: parseExpression(valueNode),
   };
+}
+
+function parseObjectPropertyKey(node: SyntaxNode): ObjectPropertyKey {
+  switch (node.type) {
+    case "number": {
+      return parseNumberLiteral(node);
+    }
+    case "string": {
+      return parseStringLiteral(node);
+    }
+  }
+
+  throw new Error(`Unexpected node type: ${node.type}`);
 }
 
 function parseNumberLiteral(node: SyntaxNode): NumberLiteral {
@@ -143,7 +157,7 @@ function parseNumberLiteral(node: SyntaxNode): NumberLiteral {
 function parseStringLiteral(node: SyntaxNode): StringLiteral {
   return {
     type: "StringLiteral",
-    value: node.firstChild!.text,
+    value: getNamedChild(node, 0).text,
   };
 }
 

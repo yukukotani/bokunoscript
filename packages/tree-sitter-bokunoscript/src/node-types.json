@@ -282,7 +282,17 @@
   {
     "type": "string",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "unescaped_string_fragment",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "unary_expression",
@@ -384,6 +394,10 @@
   },
   {
     "type": "number",
+    "named": true
+  },
+  {
+    "type": "unescaped_string_fragment",
     "named": true
   },
   {

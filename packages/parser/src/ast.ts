@@ -37,6 +37,7 @@ export type ObjectProperty = {
   key: Literal;
   value: Expression;
 };
+export type ObjectPropertyKey = NumberLiteral | StringLiteral;
 
 export type Literal = NumberLiteral | StringLiteral;
 export type NumberLiteral = {
