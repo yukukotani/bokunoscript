@@ -1,1 +1,6 @@
-foo.bar()
+fun addThenPrint(i) {
+ println(this + i)
+}
+
+val foo = 1
+foo.addThenPrint(2)
