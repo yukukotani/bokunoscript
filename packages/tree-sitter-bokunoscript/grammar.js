@@ -1,11 +1,17 @@
 module.exports = grammar({
   name: "bokunoscript",
 
+  precedences: ($) => [
+    [$.unary_expression, "binary_times", "binary_plus"],
+    [$.block, $.object_expression],
+  ],
+
   rules: {
     // TODO: add the actual grammar rules
     source_file: ($) => repeat($._statement),
 
-    _statement: ($) => choice($._expression, $.function_declaration),
+    _statement: ($) => choice($.expression_statement, $.function_declaration),
+    expression_statement: ($) => seq($._expression, "\n"),
 
     _expression: ($) =>
       choice(
@@ -19,17 +25,11 @@ module.exports = grammar({
 
     parenthesized_expression: ($) => seq("(", $._expression, ")"),
     unary_expression: ($) =>
-      prec(
-        4,
-        choice(
-          seq(field("op", "+"), field("expr", $._expression)),
-          seq(field("op", "-"), field("expr", $._expression))
-        )
-      ),
+      seq(field("op", choice("+", "-")), field("expr", $._expression)),
     binary_expression: ($) =>
       choice(
         prec.left(
-          2,
+          "binary_times",
           seq(
             field("lhs", $._expression),
             field("op", "*"),
@@ -37,7 +37,7 @@ module.exports = grammar({
           )
         ),
         prec.left(
-          2,
+          "binary_times",
           seq(
             field("lhs", $._expression),
             field("op", "/"),
@@ -45,7 +45,7 @@ module.exports = grammar({
           )
         ),
         prec.left(
-          1,
+          "binary_plus",
           seq(
             field("lhs", $._expression),
             field("op", "+"),
@@ -53,32 +53,24 @@ module.exports = grammar({
           )
         ),
         prec.left(
-          1,
+          "binary_plus",
           seq(
             field("lhs", $._expression),
             field("op", "-"),
-            field("rhs", $._expression)
-          )
-        ),
-        prec.left(
-          3,
-          seq(
-            field("lhs", $._expression),
-            field("op", "**"),
             field("rhs", $._expression)
           )
         )
       ),
 
     number: ($) => /\d+/,
-    string: ($) => seq('"', repeat($.unescaped_string_fragment), '"'),
-    unescaped_string_fragment: (_) => token.immediate(prec(1, /[^"\\]+/)),
+    string: ($) => seq('"', repeat($._unescaped_string_fragment), '"'),
+    _unescaped_string_fragment: (_) => token.immediate(/[^"\\]+/),
 
     object_expression: ($) =>
       seq("{", commaSep(optional($.object_property)), "}"),
     object_property: ($) =>
       seq(field("key", $._property_name), ":", field("value", $._expression)),
-    _property_name: ($) => choice($.number),
+    _property_name: ($) => choice($.number, $.string),
 
     function_declaration: ($) => seq("fun", $.identifier, $.block),
 
