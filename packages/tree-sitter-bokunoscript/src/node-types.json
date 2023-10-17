@@ -289,6 +289,25 @@
           "named": true
         },
         {
+          "type": "function_parameters",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function_parameters",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
           "type": "identifier",
           "named": true
         }

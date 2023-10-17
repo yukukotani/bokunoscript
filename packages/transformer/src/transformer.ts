@@ -139,12 +139,12 @@ function transformCallExpression(node: CallExpression): swc.CallExpression {
     span: span(),
     callee: transformIdentifier(node.function),
     arguments: [
-      {
-        expression: transformExpression(node.receiver),
-      },
       ...node.arguments.map((e) => ({
         expression: transformExpression(e),
       })),
+      {
+        expression: transformExpression(node.receiver),
+      },
     ],
   };
 }
@@ -178,7 +178,26 @@ function transformFunctionDeclaration(
       stmts: node.statements.map(transformStatement),
     },
     identifier: transformIdentifier(node.name),
-    params: [], // TODO
+    params: [
+      ...node.parameters.map(
+        (p) =>
+          ({
+            type: "Parameter",
+            span: span(),
+            pat: transformIdentifier(p),
+          }) as const
+      ),
+      {
+        type: "Parameter",
+        span: span(),
+        pat: {
+          type: "Identifier",
+          span: span(),
+          optional: false,
+          value: "_this",
+        },
+      },
+    ],
   };
 }
 

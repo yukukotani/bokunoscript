@@ -99,7 +99,9 @@ module.exports = grammar({
       ),
     call_arguments: ($) => seq("(", commaSep($._expression), ")"),
 
-    function_declaration: ($) => seq("fun", $.identifier, $.block),
+    function_declaration: ($) =>
+      seq("fun", $.identifier, $.function_parameters, $.block),
+    function_parameters: ($) => seq("(", commaSep($.identifier), ")"),
     variable_declaration: ($) => seq("val", $.identifier, "=", $._expression),
 
     // from tree-sitter-javascript

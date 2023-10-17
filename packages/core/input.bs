@@ -1,1 +1,5 @@
-foo.bar(3)
+fun bar(i) {
+  this + i + 3
+}
+val foo = 1
+foo.bar(2)

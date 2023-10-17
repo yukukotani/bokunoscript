@@ -70,6 +70,7 @@ export type StringLiteral = {
 export type FunctionDeclaration = {
   type: "FunctionDeclaration";
   name: Identifier;
+  parameters: readonly Identifier[];
   statements: readonly Statement[];
 };
 

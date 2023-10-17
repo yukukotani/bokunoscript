@@ -199,8 +199,12 @@ function parseFunctionDeclaration(node: SyntaxNode): FunctionDeclaration {
   return {
     type: "FunctionDeclaration",
     name: parseIdentifier(getNamedChild(node, 0)),
-    statements: parseBlock(getNamedChild(node, 1)),
+    parameters: parseFunctionParameters(getNamedChild(node, 1)),
+    statements: parseBlock(getNamedChild(node, 2)),
   };
+}
+function parseFunctionParameters(node: SyntaxNode): Identifier[] {
+  return node.namedChildren.map(parseIdentifier);
 }
 
 function parseVariableDeclaration(node: SyntaxNode): VariableDeclaration {
