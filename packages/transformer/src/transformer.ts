@@ -5,6 +5,7 @@ import type {
   FunctionDeclaration,
   Identifier,
   Literal,
+  MemberExpression,
   NumberLiteral,
   ObjectExpression,
   Statement,
@@ -54,6 +55,9 @@ function transformExpression(node: Expression): swc.Expression {
     }
     case "ObjectExpression": {
       return transformObjectExpression(node);
+    }
+    case "MemberExpression": {
+      return transformMemberExpression(node);
     }
     case "NumberLiteral": {
       return transformNumberLiteral(node);
@@ -111,6 +115,19 @@ function transformPropertyKey(node: Literal): swc.PropertyName {
       return transformStringLiteral(node);
     }
   }
+}
+function transformMemberExpression(
+  node: MemberExpression
+): swc.MemberExpression {
+  console.log(node);
+  const a = {
+    type: "MemberExpression",
+    span: span(),
+    object: transformExpression(node.object),
+    property: transformIdentifier(node.property),
+  } as const;
+  console.log("a", a);
+  return a;
 }
 function transformNumberLiteral(node: NumberLiteral): swc.NumericLiteral {
   return {

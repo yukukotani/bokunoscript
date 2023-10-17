@@ -6,6 +6,7 @@ compile(`fun foo {
   {  "foo": 2 }
 }
 val bar = 2
+"2".length
 `);
 
 export function compile(sourceCode: string) {

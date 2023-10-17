@@ -16,6 +16,7 @@ export type Expression =
   | UnaryExpression
   | BinaryExpression
   | ObjectExpression
+  | MemberExpression
   | Literal;
 export type UnaryExpression = {
   type: "UnaryExpression";
@@ -41,6 +42,12 @@ export type ObjectProperty = {
   value: Expression;
 };
 export type ObjectPropertyKey = NumberLiteral | StringLiteral;
+
+export type MemberExpression = {
+  type: "MemberExpression";
+  object: Expression;
+  property: Identifier;
+};
 
 export type Literal = NumberLiteral | StringLiteral;
 export type NumberLiteral = {

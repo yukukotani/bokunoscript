@@ -7,6 +7,7 @@ import {
   File,
   FunctionDeclaration,
   Identifier,
+  MemberExpression,
   NumberLiteral,
   ObjectExpression,
   ObjectProperty,
@@ -64,6 +65,9 @@ function parseExpression(node: SyntaxNode): Expression {
     }
     case "object_expression": {
       return parseObjectExpression(node);
+    }
+    case "member_expression": {
+      return parseMemberExpression(node);
     }
     case "number": {
       return parseNumberLiteral(node);
@@ -137,7 +141,6 @@ function parseObjectProperty(node: SyntaxNode): ObjectProperty {
     value: parseExpression(valueNode),
   };
 }
-
 function parseObjectPropertyKey(node: SyntaxNode): ObjectPropertyKey {
   switch (node.type) {
     case "number": {
@@ -149,6 +152,14 @@ function parseObjectPropertyKey(node: SyntaxNode): ObjectPropertyKey {
   }
 
   throw new Error(`Unexpected node type: ${node.type}`);
+}
+
+function parseMemberExpression(node: SyntaxNode): MemberExpression {
+  return {
+    type: "MemberExpression",
+    object: parseExpression(getNamedChild(node, 0)),
+    property: parseIdentifier(getNamedChild(node, 1)),
+  };
 }
 
 function parseNumberLiteral(node: SyntaxNode): NumberLiteral {
