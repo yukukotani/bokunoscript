@@ -10,6 +10,7 @@ import type {
   Statement,
   StringLiteral,
   UnaryExpression,
+  VariableDeclaration,
 } from "@bokunoscript/parser";
 import * as swc from "@swc/core";
 
@@ -30,6 +31,9 @@ function transformStatement(node: Statement): swc.Statement {
   switch (node.type) {
     case "FunctionDeclaration": {
       return transformFunctionDeclaration(node);
+    }
+    case "VariableDeclaration": {
+      return transformVariableDeclaration(node);
     }
     case "ExpressionStatement": {
       return {
@@ -139,6 +143,26 @@ function transformFunctionDeclaration(
     },
     identifier: transformIdentifier(node.name),
     params: [], // TODO
+  };
+}
+
+function transformVariableDeclaration(
+  node: VariableDeclaration
+): swc.VariableDeclaration {
+  return {
+    type: "VariableDeclaration",
+    span: span(),
+    declare: false,
+    kind: "const",
+    declarations: [
+      {
+        type: "VariableDeclarator",
+        span: span(),
+        definite: false,
+        id: transformIdentifier(node.name),
+        init: transformExpression(node.expression),
+      },
+    ],
   };
 }
 

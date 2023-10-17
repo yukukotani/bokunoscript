@@ -14,6 +14,7 @@ import {
   Statement,
   StringLiteral,
   UnaryExpression,
+  VariableDeclaration,
 } from "./ast";
 
 export function parse(sourceCode: string) {
@@ -23,7 +24,7 @@ export function parse(sourceCode: string) {
 }
 
 function parseFile(node: SyntaxNode): File {
-  const statements = node.children.map(parseStatement);
+  const statements = node.namedChildren.map(parseStatement);
   return {
     type: "File",
     statements,
@@ -34,6 +35,9 @@ function parseStatement(node: SyntaxNode): Statement {
   switch (node.type) {
     case "function_declaration": {
       return parseFunctionDeclaration(node);
+    }
+    case "variable_declaration": {
+      return parseVariableDeclaration(node);
     }
     case "expression_statement": {
       return parseExpressionStatement(node);
@@ -166,6 +170,14 @@ function parseFunctionDeclaration(node: SyntaxNode): FunctionDeclaration {
     type: "FunctionDeclaration",
     name: parseIdentifier(getNamedChild(node, 0)),
     statements: parseBlock(getNamedChild(node, 1)),
+  };
+}
+
+function parseVariableDeclaration(node: SyntaxNode): VariableDeclaration {
+  return {
+    type: "VariableDeclaration",
+    name: parseIdentifier(getNamedChild(node, 0)),
+    expression: parseExpression(getNamedChild(node, 1)),
   };
 }
 

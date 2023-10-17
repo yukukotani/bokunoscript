@@ -10,8 +10,16 @@ module.exports = grammar({
     // TODO: add the actual grammar rules
     source_file: ($) => repeat($._statement),
 
-    _statement: ($) => choice($.expression_statement, $.function_declaration),
-    expression_statement: ($) => seq($._expression, "\n"),
+    _statement: ($) =>
+      seq(
+        choice(
+          $.expression_statement,
+          $.function_declaration,
+          $.variable_declaration
+        ),
+        "\n"
+      ),
+    expression_statement: ($) => seq($._expression),
 
     _expression: ($) =>
       choice(
@@ -73,6 +81,7 @@ module.exports = grammar({
     _property_key: ($) => choice($.number, $.string),
 
     function_declaration: ($) => seq("fun", $.identifier, $.block),
+    variable_declaration: ($) => seq("val", $.identifier, "=", $._expression),
 
     // from tree-sitter-javascript
     identifier: (_) => {

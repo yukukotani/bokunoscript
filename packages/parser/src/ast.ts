@@ -3,7 +3,10 @@ export type File = {
   statements: readonly Statement[];
 };
 
-export type Statement = ExpressionStatement | FunctionDeclaration;
+export type Statement =
+  | ExpressionStatement
+  | FunctionDeclaration
+  | VariableDeclaration;
 export type ExpressionStatement = {
   type: "ExpressionStatement";
   expression: Expression;
@@ -53,6 +56,12 @@ export type FunctionDeclaration = {
   type: "FunctionDeclaration";
   name: Identifier;
   statements: readonly Statement[];
+};
+
+export type VariableDeclaration = {
+  type: "VariableDeclaration";
+  name: Identifier;
+  expression: Expression;
 };
 
 export type Identifier = {
