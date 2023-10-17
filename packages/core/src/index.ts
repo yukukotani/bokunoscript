@@ -1,13 +1,16 @@
 import { parse } from "@bokunoscript/parser";
 import { transform } from "@bokunoscript/transformer";
-import { writeFileSync } from "fs";
+import { writeFileSync, readFileSync } from "fs";
+import * as path from "path";
 
-compile(`"foo".bar(1)`);
+const file = readFileSync(path.join(__dirname, "../input.bs"));
+
+compile(String(file));
 
 export function compile(sourceCode: string) {
   const tree = parse(sourceCode);
 
   const output = transform(tree);
 
-  writeFileSync("dist.js", output);
+  writeFileSync(path.join(__dirname, "../dist.js"), output);
 }
