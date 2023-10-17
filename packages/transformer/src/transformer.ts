@@ -222,11 +222,12 @@ function transformVariableDeclaration(
 }
 
 function transformIdentifier(node: Identifier): swc.Identifier {
+  const value = node.name === "this" ? "_this" : node.name;
   return {
     type: "Identifier",
     span: span(),
     optional: false,
-    value: node.name,
+    value: value,
   };
 }
 
